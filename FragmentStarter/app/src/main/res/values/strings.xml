@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">FragmentStarter</string>
+    <string name="static_fragment_text">static fragment text</string>
+    <string name="testString">do test static fragment</string>
+    <string name="testString1">do test static fragment 1</string>
 </resources>

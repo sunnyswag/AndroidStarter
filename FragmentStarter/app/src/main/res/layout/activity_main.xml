@@ -1,18 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.demo.fragmentstarter.MainActivity" >
 
-    <TextView
+    <fragment
+        android:id="@+id/static_fragment"
+        android:name="com.demo.fragmentstarter.fragment.StaticFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:tag="static_fragment_tag"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <fragment
+        android:id="@+id/static_fragment1"
+        android:name="com.demo.fragmentstarter.fragment.StaticFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/static_fragment"
+        android:tag="static_fragment_tag1"/>
+
+</RelativeLayout>
