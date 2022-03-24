@@ -17,8 +17,6 @@ class OnLayoutFragment: Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_on_layout, container, false)
 
-        val squareImageView = root.findViewById<SquareImageView>(R.id.square_imageview)
-
         return root
     }
 }
