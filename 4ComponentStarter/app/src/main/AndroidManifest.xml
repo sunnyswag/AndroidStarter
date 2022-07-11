@@ -22,6 +22,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".MainService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
+        <receiver android:name=".broadcast.MyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.fourcomponentstarter.MY_BROADCAST" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".broadcast.AnotherBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="10">
+                <action android:name="com.example.fourcomponentstarter.MY_BROADCAST" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
