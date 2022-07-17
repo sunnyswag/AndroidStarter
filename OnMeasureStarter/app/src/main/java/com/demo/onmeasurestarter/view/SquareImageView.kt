@@ -2,6 +2,7 @@ package com.demo.onmeasurestarter.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageView
 
 class SquareImageView: AppCompatImageView {
@@ -15,7 +16,9 @@ class SquareImageView: AppCompatImageView {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
+        val test = LinearLayout(context)
+
         val size = measuredHeight.coerceAtLeast(measuredWidth)
-        setMeasuredDimension(size, size)
+        setMeasuredDimension(size, size) // 保存测得的尺寸
     }
 }

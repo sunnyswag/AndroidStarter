@@ -17,7 +17,7 @@ class OnDrawFragment: Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_on_draw, container, false)
 
-        val circleImageView = root.findViewById<CircleImageView>(R.id.circle_imageview)
+        val circleImageView = root.findViewById<View>(R.id.circle_imageview)
 
         return root
     }

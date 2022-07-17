@@ -2,6 +2,7 @@ package com.demo.onmeasurestarter.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,9 @@ class OnMeasureFragment: Fragment() {
         val squareImageView = root.findViewById<SquareImageView>(R.id.square_imageview)
 
         val viewModel = ViewModelProvider(this).get(OnMeasureViewModel::class.java)
+        viewModel.widthLastTime.observe(viewLifecycleOwner) {
+            Log.d("OK", "$it")
+        }
 
         squareImageView.setOnClickListener {
             val lp: ViewGroup.LayoutParams =  it.layoutParams

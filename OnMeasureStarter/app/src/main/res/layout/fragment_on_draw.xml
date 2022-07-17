@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.demo.onmeasurestarter.view.CircleImageView
+    <com.demo.onmeasurestarter.view.CircleView
         android:id="@+id/circle_imageview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

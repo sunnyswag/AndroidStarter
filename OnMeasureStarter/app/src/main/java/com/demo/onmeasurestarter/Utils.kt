@@ -1,4 +1,4 @@
-package com.example.drawingstarter
+package com.demo.onmeasurestarter
 
 import android.content.res.Resources
 import android.util.TypedValue
