@@ -2,6 +2,7 @@ package com.example.javastarter
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.javastarter.exception.CustomException
 import com.example.javastarter.generics.MyPair
 import com.example.javastarter.generics.domain.Apple
 import com.example.javastarter.generics.domain.Fruit
@@ -16,12 +17,18 @@ class MainActivity : AppCompatActivity() {
 
         testPair()
 
+        testException()
+
         val flist: List<Fruit> = ArrayList<Apple>()
         val first1 = flist[0]
 
         val slist: ArrayList<in Apple> = ArrayList<Fruit>()
         slist.add(Apple())
         slist.add(Fruit() as Apple)
+    }
+
+    private fun testException() {
+        throw CustomException("test your exception!")
     }
 
     private fun testPair() {
