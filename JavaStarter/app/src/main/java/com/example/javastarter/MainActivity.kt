@@ -1,12 +1,13 @@
 package com.example.javastarter
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.javastarter.exception.CustomException
 import com.example.javastarter.generics.MyPair
 import com.example.javastarter.generics.domain.Apple
 import com.example.javastarter.generics.domain.Fruit
-import java.util.*
+import com.example.javastarter.reflection.DeskEntity
 import kotlin.collections.ArrayList
 
 
@@ -17,14 +18,36 @@ class MainActivity : AppCompatActivity() {
 
         testPair()
 
-        testException()
+//        testException()
+
+        testReflection();
 
         val flist: List<Fruit> = ArrayList<Apple>()
-        val first1 = flist[0]
+//        val first1 = flist[0]
 
         val slist: ArrayList<in Apple> = ArrayList<Fruit>()
         slist.add(Apple())
-        slist.add(Fruit() as Apple)
+//        slist.add(Fruit() as Apple)
+    }
+
+    private fun testReflection() {
+        val deskEntityClass = Class.forName("com.example.javastarter.reflection.DeskEntity")
+        for (field in deskEntityClass.fields) {
+            Log.d("huiqing", field.name)
+        }
+
+        for (method in deskEntityClass.methods) {
+            Log.d("huiqing", method.name)
+        }
+
+        val deskEntity = deskEntityClass.newInstance() as DeskEntity
+        val methodSet = deskEntityClass.getMethod("setName", String::class.java)
+        methodSet.invoke(deskEntity, "zhangsan")
+
+        val methodGet = deskEntityClass.getMethod("getName")
+        val name = methodGet.invoke(deskEntity)
+
+        Log.d("huiqing", "getName: $name")
     }
 
     private fun testException() {
