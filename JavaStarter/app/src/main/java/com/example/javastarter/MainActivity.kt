@@ -3,11 +3,17 @@ package com.example.javastarter
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import com.example.javastarter.exception.CustomException
 import com.example.javastarter.generics.MyPair
 import com.example.javastarter.generics.domain.Apple
 import com.example.javastarter.generics.domain.Fruit
+import com.example.javastarter.multiprocess.MyRunnable
+import com.example.javastarter.multiprocess.MyThread
 import com.example.javastarter.reflection.DeskEntity
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
 import kotlin.collections.ArrayList
 
 
@@ -16,18 +22,33 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        testPair()
+//        testPair()
 
 //        testException()
 
-        testReflection();
+//        testReflection()
 
+//        testGenerics()
+
+        testMultiProcess()
+        LiveData
+    }
+
+    private fun testMultiProcess() {
+        MyThread().start()
+
+        Thread(MyRunnable()).start()
+
+        Executors.newFixedThreadPool()
+    }
+
+    private fun testGenerics() {
         val flist: List<Fruit> = ArrayList<Apple>()
-//        val first1 = flist[0]
+        //        val first1 = flist[0]
 
         val slist: ArrayList<in Apple> = ArrayList<Fruit>()
         slist.add(Apple())
-//        slist.add(Fruit() as Apple)
+        //        slist.add(Fruit() as Apple)
     }
 
     private fun testReflection() {
