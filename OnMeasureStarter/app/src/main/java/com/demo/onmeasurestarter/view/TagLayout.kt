@@ -36,10 +36,10 @@ class TagLayout: ViewGroup {
         var widthUsed: Int = 0
         var heightUsed: Int = 0
 
-        var widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        var widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
 
-        for ( i in 0 until childCount) {
+        for (i in 0 until childCount) {
             val child: View = getChildAt(i)
             // widthUsed 设置为 0，不会被挤压
             measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, heightUsed)

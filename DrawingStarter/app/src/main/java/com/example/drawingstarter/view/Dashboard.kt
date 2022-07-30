@@ -3,20 +3,23 @@ package com.example.drawingstarter.view
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.IntRange
 import com.example.drawingstarter.Utils
+import java.util.concurrent.Executor
 import kotlin.math.cos
 import kotlin.math.sin
 
 class Dashboard(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val dash = Path()
+    private val dash by lazy { Path() }
 
     private val pathEffect: PathDashPathEffect
 
     init {
+        invalidate()
         dash.addRect(0F, 0F, Utils.dp2px(2F), Utils.dp2px(10F), Path.Direction.CW)
 
         mPaint.let {

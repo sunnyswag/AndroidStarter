@@ -6,7 +6,7 @@ import android.view.ViewGroup
 object Util {
 
     /**
-     * 通过 viewId 来找到相应的 View，
+     * 通过 viewID 来找到相应的 View，
      * 如果存在，则返回 View。如果不存在，则返回 null
      *
      * 如果是 ViewGroup ，则递归查找子 View，找到相应的 ID，
