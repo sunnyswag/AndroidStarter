@@ -9,12 +9,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val test: String by Delegates.observable("test"){
-
-        }
-
-        test.toString()
-        test.toString()
         findViewById<ViewPager2>(R.id.viewPager).adapter = DemoPagerAdapter(this)
     }
 }
