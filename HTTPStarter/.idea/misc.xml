@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/huiqinhuang/Desktop/Git/AndroidStarter/HTTPStarter/app/src/main/res/layout/activity_main.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/huiqinhuang/Desktop/Git/AndroidStarter/HTTPStarter/app/src/main/res/layout/fragment_httpurlconnection.xml" value="0.21784420289855072" />
+        <entry key="..\:/Users/huiqinhuang/Desktop/Git/AndroidStarter/HTTPStarter/app/src/main/res/layout/fragment_retrofit.xml" value="0.22644927536231885" />
+        <entry key="..\:/Users/huiqinhuang/Desktop/Git/AndroidStarter/HTTPStarter/app/src/main/res/layout/fragment_webview.xml" value="0.164275956284153" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
