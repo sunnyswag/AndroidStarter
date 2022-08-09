@@ -8,6 +8,7 @@ import com.example.javastarter.exception.CustomException
 import com.example.javastarter.generics.MyPair
 import com.example.javastarter.generics.domain.Apple
 import com.example.javastarter.generics.domain.Fruit
+import com.example.javastarter.multiprocess.ArrayListProblem
 import com.example.javastarter.multiprocess.MyRunnable
 import com.example.javastarter.multiprocess.MyThread
 import com.example.javastarter.reflection.DeskEntity
@@ -30,16 +31,23 @@ class MainActivity : AppCompatActivity() {
 
 //        testGenerics()
 
-        testMultiProcess()
-        LiveData
+//        testMultiProcess()
+
+        testMultiProcessError()
+    }
+
+    private fun testMultiProcessError() {
+        ArrayListProblem().let {
+            it.startAdd1()
+            it.startAdd2()
+            it.printResult()
+        }
     }
 
     private fun testMultiProcess() {
         MyThread().start()
 
         Thread(MyRunnable()).start()
-
-        Executors.newFixedThreadPool()
     }
 
     private fun testGenerics() {

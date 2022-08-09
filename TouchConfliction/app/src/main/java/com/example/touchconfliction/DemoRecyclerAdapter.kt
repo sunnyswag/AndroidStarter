@@ -27,7 +27,6 @@ class DemoRecyclerAdapter: RecyclerView.Adapter<DemoRecyclerAdapter.DemoRecycler
         return mData.size
     }
 
-
     class DemoRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView
         init {

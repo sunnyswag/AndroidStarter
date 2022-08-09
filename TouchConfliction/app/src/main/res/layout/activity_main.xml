@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <ScrollView
+    <com.example.touchconfliction.badview.BadScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -24,7 +24,7 @@
                 android:paddingBottom="200dp"
                 android:layout_height="wrap_content" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.example.touchconfliction.badview.BadRecyclerView
                 android:id="@+id/recyclerDemo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-    </ScrollView>
+    </com.example.touchconfliction.badview.BadScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
