@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MusicVisualizer">
+        <attr name="rectColor" format="color" />
+        <attr name="rectWidth" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="MusicSeekBar">
+        <attr name="thumbTint" format="color" />
+        <attr name="progressBackgroundTint" format="color" />
+        <attr name="progressTint" format="color" />
+    </declare-styleable>
+</resources>
