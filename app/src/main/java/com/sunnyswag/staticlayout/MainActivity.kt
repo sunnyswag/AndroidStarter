@@ -8,10 +8,14 @@ import android.os.Looper
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,8 +53,18 @@ class MainActivity : AppCompatActivity() {
         val blurView = findViewById<BlurView>(R.id.blurView)
         val rootView = findViewById<ConstraintLayout>(R.id.rootView)
         blurView.setupWith(rootView, RenderScriptBlur(this))
-            .setBlurRadius(5F)
-            .setOverlayColor(Color.parseColor("#77000000"))
+//            .setBlurRadius(5F)
+//            .setOverlayColor(Color.parseColor("#77000000"))
+
+        runBlocking {
+            val job = withTimeoutOrNull(2000L) {
+                delay(3000L)
+                Toast.makeText(baseContext, "continue", Toast.LENGTH_SHORT).show()
+            }
+            if (job == null) {
+                Toast.makeText(baseContext, "timeout", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
