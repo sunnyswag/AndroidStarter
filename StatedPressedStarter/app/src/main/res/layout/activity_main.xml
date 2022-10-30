@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.1" />
 
     <ImageView
         android:id="@+id/iv_love_you"
@@ -21,26 +21,33 @@
         android:src="@drawable/love_you" />
 
     <ImageView
-        android:id="@+id/iv_jiaran_bg"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:clickable="true"
-        android:src="@drawable/jiaran_remove_bg"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
         android:id="@+id/iv_jiaran_src"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:clickable="true"
-        android:src="@drawable/jiaran_remove_bg"
+        android:src="@drawable/love_you"
+        android:paddingTop="50dp"
+        android:paddingEnd="45dp"
+        android:background="@drawable/jiaran_angry_drawable"
+        android:backgroundTint="@color/selector_pressed_overlay"
+        android:backgroundTintMode="src_atop"
         tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/iv_jiaran_bg"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:clickable="true"
+        android:src="@drawable/jiaran_angry_drawable"
+        android:tintMode="src_atop"
+        tools:ignore="MissingConstraints"
+        app:tint="@color/selector_pressed_overlay" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guidelineTop"
-        app:constraint_referenced_ids="iv_love_you, iv_jiaran_bg,
-            iv_jiaran_src" />
+        app:constraint_referenced_ids="iv_love_you, iv_jiaran_src,
+        iv_jiaran_bg" />
 </androidx.constraintlayout.widget.ConstraintLayout>
