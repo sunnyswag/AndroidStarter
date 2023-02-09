@@ -3,6 +3,7 @@ package com.example.viewpager2starter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 class HorizontalVpAdapter internal constructor(private val mContext: Context) :
     RecyclerView.Adapter<HorizontalVpAdapter.HorizontalVpViewHolder>() {
 
-    private var backgrounds = mutableListOf(R.color.black, R.color.purple_500, R.color.teal_200,
-        R.color.purple_200, R.color.teal_700)
+    private var backgrounds = mutableListOf("#EDA179", "#F7BF7E", "#E0C17E", "#FAE589", "#F0EA86")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalVpViewHolder {
         return HorizontalVpViewHolder(
@@ -32,8 +32,8 @@ class HorizontalVpAdapter internal constructor(private val mContext: Context) :
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HorizontalVpViewHolder, position: Int) {
-        holder.mTextView.text = "第 " + (position + 1) + " 个界面"
-        holder.mTextView.setBackgroundResource(backgrounds[position])
+        holder.mTextView.text = "第 $position 个界面"
+        holder.mTextView.setBackgroundColor(Color.parseColor(backgrounds[position]))
     }
 
     override fun getItemCount(): Int {
