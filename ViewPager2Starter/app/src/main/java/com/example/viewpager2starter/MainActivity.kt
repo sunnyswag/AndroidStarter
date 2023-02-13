@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 //                tvMethodName.text = "onPageSelected:"
-//                tvResult.text = position.toString()
+//                tvResult.text = "position: $position"
             }
 
             override fun onPageScrolled(
@@ -31,13 +31,22 @@ class MainActivity : AppCompatActivity() {
                 positionOffsetPixels: Int
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+//                tvMethodName.text = "onPageScrolled:"
+//                tvResult.text = "position: $position, positionOffset: $positionOffset, positionOffsetPixels: $positionOffsetPixels"
             }
+            
 
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
                 tvMethodName.text = "onPageScrollStateChanged:"
-                tvResult.text = "state: $state, vpTest.currentItem: ${vpTest.currentItem}"
+                tvResult.text = "state: "+ when (state) {
+                    ViewPager2.SCROLL_STATE_IDLE -> "SCROLL_STATE_IDLE"
+                    ViewPager2.SCROLL_STATE_DRAGGING -> "SCROLL_STATE_DRAGGING"
+                    ViewPager2.SCROLL_STATE_SETTLING -> "SCROLL_STATE_SETTLING"
+                    else -> "Unknown state"
+                }
             }
+
         })
     }
 }
