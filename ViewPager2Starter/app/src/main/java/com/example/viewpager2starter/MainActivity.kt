@@ -31,8 +31,7 @@ class MainActivity : AppCompatActivity() {
                 positionOffsetPixels: Int
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-//                tvMethodName.text = "onPageScrolled:"
-//                tvResult.text = "position: $position, positionOffset: $positionOffset, positionOffsetPixels: $positionOffsetPixels"
+
             }
             
 
