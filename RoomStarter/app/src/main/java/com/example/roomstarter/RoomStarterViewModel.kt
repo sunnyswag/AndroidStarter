@@ -6,8 +6,8 @@ import com.example.roomstarter.room.User
 import com.example.roomstarter.room.UserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,17 +25,36 @@ class RoomStarterViewModel @Inject constructor(
             initialValue = listOf()
         )
 
-    val latestData = userDao.loadAllById(3)
+    val selectedData = userDao.loadAllById(3)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = null
         )
 
+    val selectedMultiData = userDao.loadAllByIdsFlow(2, 3)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = listOf()
+        )
+
     fun insertData() {
         viewModelScope.launch(Dispatchers.IO) {
             curUserIndex++
             userDao.insert(User(curUserIndex, curUserIndex.toString(), curUserIndex.toString()))
+        }
+    }
+
+    fun updateUser0() {
+        viewModelScope.launch(Dispatchers.IO) {
+            userDao.update(User(0, "$curUserIndex", "$curUserIndex"))
+        }
+    }
+
+    fun updateUser3() {
+        viewModelScope.launch(Dispatchers.IO) {
+            userDao.update(User(3, "$curUserIndex", "$curUserIndex"))
         }
     }
 

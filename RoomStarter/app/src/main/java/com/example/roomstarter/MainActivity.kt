@@ -23,7 +23,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.roomstarter.room.User
 import com.example.roomstarter.room.UserDao
@@ -51,7 +50,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val viewModel by viewModels<RoomStarterViewModel>()
                     val allUserData by viewModel.userData.collectAsState()
-                    val lastUserData by viewModel.latestData.collectAsState()
+                    val filteredUserData by viewModel.selectedData.collectAsState()
+                    val filteredMultiUserData by viewModel.selectedMultiData.collectAsState()
                     Column {
                         Row {
                             EditUserRoomTable("Delete last User") { viewModel.deleteLastData() }
@@ -59,10 +59,17 @@ class MainActivity : ComponentActivity() {
                             EditUserRoomTable("Delete All") { viewModel.deleteAll() }
                         }
                         EditUserRoomTable("Insert User") { viewModel.insertData() }
+                        Row {
+                            EditUserRoomTable("Edit User(0)") { viewModel.updateUser0() }
+                            Spacer(modifier = Modifier.width(5.dp))
+                            EditUserRoomTable("Edit User(3)") { viewModel.updateUser3() }
+                        }
                         Spacer(modifier = Modifier.height(5.dp))
                         ShowUserInfo(allUserData)
-                        Spacer(modifier = Modifier.height(10.dp))
-                        ShowLatestUserInfo(lastUserData)
+                        Spacer(modifier = Modifier.height(20.dp))
+                        ShowLatestUserInfo(filteredUserData)
+                        Spacer(modifier = Modifier.height(20.dp))
+                        ShowUserInfo(filteredMultiUserData, doLog = true)
                     }
                 }
             }
@@ -85,7 +92,10 @@ class MainActivity : ComponentActivity() {
 private const val TAG = "MainActivity"
 
 @Composable
-fun ShowUserInfo(userInfo: List<User>) {
+fun ShowUserInfo(userInfo: List<User>, doLog: Boolean = false) {
+    if (doLog) {
+        Log.d(TAG, "userInfo: $userInfo")
+    }
     LazyColumn {
         items(userInfo) {
             Text(text = "uid: ${it.uid}, firstName: ${it.firstName}, lastName: ${it.lastName}")

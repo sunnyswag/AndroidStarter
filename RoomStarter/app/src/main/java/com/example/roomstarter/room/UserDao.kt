@@ -1,10 +1,10 @@
 package com.example.roomstarter.room
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,6 +18,9 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE uid IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<User>
 
+    @Query("SELECT * FROM user WHERE uid in (:userIds)")
+    fun loadAllByIdsFlow(vararg userIds: Int): Flow<List<User>>
+
     @Query("SELECT * FROM user WHERE uid = :userId")
     fun loadAllById(userId: Int): Flow<User>
 
@@ -30,6 +33,9 @@ interface UserDao {
 
     @Insert
     fun insert(user: User)
+
+    @Update
+    fun update(user: User)
 
     @Query("DELETE FROM user WHERE uid = :uid")
     fun deleteByUid(uid: Int)
