@@ -39,6 +39,21 @@ class RoomStarterViewModel @Inject constructor(
             initialValue = listOf()
         )
 
+    fun selectedMultiDataDistinct() = userDao.loadAllByIdsFlow(2, 3)
+        .distinctUntilChanged(areEquivalent = { old, new ->
+//            if (old.size != new.size) {
+//                return@distinctUntilChanged false
+//            }
+//
+//            for (i in old.indices) {
+//                if (old[i] != new[i]) {
+//                    return@distinctUntilChanged false
+//                }
+//            }
+
+            return@distinctUntilChanged true
+        })
+
     fun insertData() {
         viewModelScope.launch(Dispatchers.IO) {
             curUserIndex++

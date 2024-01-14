@@ -52,6 +52,9 @@ class MainActivity : ComponentActivity() {
                     val allUserData by viewModel.userData.collectAsState()
                     val filteredUserData by viewModel.selectedData.collectAsState()
                     val filteredMultiUserData by viewModel.selectedMultiData.collectAsState()
+                    val filteredMultiUserDataDistinct by viewModel.selectedMultiDataDistinct().collectAsState(
+                        listOf()
+                    )
                     Column {
                         Row {
                             EditUserRoomTable("Delete last User") { viewModel.deleteLastData() }
@@ -69,7 +72,8 @@ class MainActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(20.dp))
                         ShowLatestUserInfo(filteredUserData)
                         Spacer(modifier = Modifier.height(20.dp))
-                        ShowUserInfo(filteredMultiUserData, doLog = true)
+                        ShowUserInfo(filteredMultiUserData, logTag = "filteredMultiUserData")
+                        ShowUserInfo(filteredMultiUserDataDistinct, logTag = "filteredMultiUserDataDistinct")
                     }
                 }
             }
@@ -92,9 +96,9 @@ class MainActivity : ComponentActivity() {
 private const val TAG = "MainActivity"
 
 @Composable
-fun ShowUserInfo(userInfo: List<User>, doLog: Boolean = false) {
-    if (doLog) {
-        Log.d(TAG, "userInfo: $userInfo")
+fun ShowUserInfo(userInfo: List<User>, logTag: String? = null) {
+    logTag?.let {
+        Log.d(TAG, "ShowUserInfo $logTag: $userInfo")
     }
     LazyColumn {
         items(userInfo) {
