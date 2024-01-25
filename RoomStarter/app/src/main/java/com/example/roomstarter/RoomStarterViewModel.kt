@@ -41,11 +41,20 @@ class RoomStarterViewModel @Inject constructor(
         )
 
     val selectedMultiData = userDao.loadAllByIdsFlow(2, 3)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = listOf()
-        )
+        .distinctUntilChanged(areEquivalent = {
+            old, new ->
+            if (old.size != new.size) {
+                return@distinctUntilChanged false
+            }
+
+            for (i in old.indices) {
+                if (old[i] != new[i]) {
+                    return@distinctUntilChanged false
+                }
+            }
+
+            return@distinctUntilChanged true
+        })
 
     init {
         viewModelScope.launch {

@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.roomstarter.room.User
 import com.example.roomstarter.room.UserDao
@@ -38,8 +39,17 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userDao: UserDao
 
+    private lateinit var viewModel: RoomStarterViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[RoomStarterViewModel::class.java]
+
+        lifecycleScope.launch {
+            viewModel.selectedMultiData.collect {
+                Log.d(TAG, "selectedMultiData: $it")
+            }
+        }
 
         setContent {
             RoomStarterTheme {
@@ -51,7 +61,7 @@ class MainActivity : ComponentActivity() {
                     val viewModel by viewModels<RoomStarterViewModel>()
                     val allUserData by viewModel.userData.collectAsState()
                     val filteredUserData by viewModel.selectedData.collectAsState()
-                    val filteredMultiUserData by viewModel.selectedMultiData.collectAsState()
+                    val filteredMultiUserData by viewModel.selectedMultiData.collectAsState(listOf())
                     val filteredMultiUserDataDistinct by viewModel.selectedMultiDataDistinct().collectAsState(
                         listOf()
                     )
