@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
                         listOf()
                     )
                     Column {
+                        DistinctUntilChangedTestButton(viewModel)
                         Row {
                             EditUserRoomTable("Delete last User") { viewModel.deleteLastData() }
                             Spacer(modifier = Modifier.width(5.dp))
@@ -79,6 +80,15 @@ class MainActivity : ComponentActivity() {
             }
         }
         testUserDao(userDao)
+    }
+
+    @Composable
+    private fun DistinctUntilChangedTestButton(viewModel: RoomStarterViewModel) {
+        Button(modifier = Modifier.wrapContentSize(), onClick = {
+            viewModel.startTestDistinctData()
+        }) {
+            Text(text = "Emit Distinct Data")
+        }
     }
 
     private fun testUserDao(userDao: UserDao) {

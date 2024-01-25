@@ -1,11 +1,14 @@
 package com.example.roomstarter
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roomstarter.room.User
 import com.example.roomstarter.room.UserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
@@ -16,7 +19,12 @@ import javax.inject.Inject
 class RoomStarterViewModel @Inject constructor(
     private val userDao: UserDao
 ): ViewModel() {
+    private val logTag = "RoomStarterViewModel"
     private var curUserIndex = DEFAULT_INDEX
+
+    private val _testDistinctData = MutableSharedFlow<Int>()
+    private val testDistinctData: Flow<Int>
+        get() = _testDistinctData.distinctUntilChanged()
 
     val userData = userDao.getAll()
         .stateIn(
@@ -38,6 +46,14 @@ class RoomStarterViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = listOf()
         )
+
+    init {
+        viewModelScope.launch {
+            testDistinctData.collect { value ->
+                Log.d(logTag, "collectDistinctData: $value")
+            }
+        }
+    }
 
     fun selectedMultiDataDistinct() = userDao.loadAllByIdsFlow(2, 3)
         .distinctUntilChanged(areEquivalent = { old, new ->
@@ -79,6 +95,14 @@ class RoomStarterViewModel @Inject constructor(
                 userDao.deleteByUid(curUserIndex)
                 curUserIndex--
             }
+        }
+    }
+
+    fun startTestDistinctData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val random = (0..2).random()
+            Log.d(logTag, "emitDistinctData: $random")
+            _testDistinctData.emit(random)
         }
     }
 
