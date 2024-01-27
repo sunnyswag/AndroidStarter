@@ -46,6 +46,18 @@ class MainActivity : ComponentActivity() {
         viewModel = ViewModelProvider(this)[RoomStarterViewModel::class.java]
 
         lifecycleScope.launch {
+            viewModel.userData.collect {
+                Log.d(TAG, "userData: $it")
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.selectedData.collect {
+                Log.d(TAG, "selectedData: $it")
+            }
+        }
+
+        lifecycleScope.launch {
             viewModel.selectedMultiData.collect {
                 Log.d(TAG, "selectedMultiData: $it")
             }
@@ -118,7 +130,7 @@ private const val TAG = "MainActivity"
 @Composable
 fun ShowUserInfo(userInfo: List<User>, logTag: String? = null) {
     logTag?.let {
-        Log.d(TAG, "ShowUserInfo $logTag: $userInfo")
+//        Log.d(TAG, "ShowUserInfo $logTag: $userInfo")
     }
     LazyColumn {
         items(userInfo) {
@@ -129,7 +141,7 @@ fun ShowUserInfo(userInfo: List<User>, logTag: String? = null) {
 
 @Composable
 fun ShowLatestUserInfo(userInfo: User?) {
-    Log.d(TAG, "$userInfo")
+//    Log.d(TAG, "$userInfo")
     userInfo?.let {
         Text(text = "uid: ${userInfo.uid}, firstName: ${it.firstName}, lastName: ${it.lastName}")
     }
