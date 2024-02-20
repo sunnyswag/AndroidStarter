@@ -29,7 +29,6 @@ import com.example.roomstarter.room.User
 import com.example.roomstarter.room.UserDao
 import com.example.roomstarter.ui.theme.RoomStarterTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -101,7 +100,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        testUserDao(userDao)
     }
 
     @Composable
@@ -112,17 +110,6 @@ class MainActivity : ComponentActivity() {
             Text(text = "Emit Distinct Data")
         }
     }
-
-    private fun testUserDao(userDao: UserDao) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val all = userDao.queryAll() // return type: List<User>
-            Log.d(TAG, "$all, size: ${all.size}")
-
-            val sd = userDao.findByName("", "") // return type: User
-//            Log.d(TAG, "${sd.firstName}")
-        }
-    }
-
 }
 
 private const val TAG = "MainActivity"
