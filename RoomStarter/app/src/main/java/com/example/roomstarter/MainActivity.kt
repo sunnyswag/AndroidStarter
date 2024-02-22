@@ -44,8 +44,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[RoomStarterViewModel::class.java]
-        viewModel.initSelectedUserData(2)
-//        viewModel.initMultiSelectedUserData(2, 3)
+//        viewModel.initSelectedUserData(2)
+        viewModel.initMultiSelectedUserData(2, 3)
 
         lifecycleScope.launch {
             viewModel.userData.collect {
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             viewModel.selectedUserData.collect {
-                Log.d(TAG, "selectedUserData: $it, ${it.size}, ${it.first().firstName}")
+                Log.d(TAG, "selectedUserData: $it")
             }
         }
 
@@ -102,8 +102,8 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun UpdateFlowDataTestButton(viewModel: RoomStarterViewModel) {
         Button(modifier = Modifier.wrapContentSize(), onClick = {
-            viewModel.initSelectedUserData(3)
-//            viewModel.initMultiSelectedUserData(4, 5)
+//            viewModel.initSelectedUserData(3)
+            viewModel.initMultiSelectedUserData(4, 5)
         }) {
             Text(text = "Update Flow Data")
         }

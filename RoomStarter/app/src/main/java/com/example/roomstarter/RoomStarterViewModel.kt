@@ -7,11 +7,12 @@ import com.example.roomstarter.room.User
 import com.example.roomstarter.room.UserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -24,6 +25,7 @@ class RoomStarterViewModel @Inject constructor(
 ): ViewModel() {
     private val logTag = "RoomStarterViewModel"
     private var curUserIndex = DEFAULT_INDEX
+    private var userDataJob: Job? = null
 
     private val _selectedUserData = MutableStateFlow<List<User>>(listOf())
     val selectedUserData: Flow<List<User>>
@@ -45,8 +47,10 @@ class RoomStarterViewModel @Inject constructor(
 
     fun initSelectedUserData(userId: Int) {
         Log.d(logTag, "initSelectedUserData: $userId")
-        viewModelScope.launch {
+        userDataJob?.cancel()
+        userDataJob = viewModelScope.launch {
             userDao.queryByUserId(userId)
+                .filterNotNull()
                 .map { listOf(it) }
                 .flowOn(Dispatchers.IO)
                 .collect { _selectedUserData.emit(it) }
@@ -55,7 +59,8 @@ class RoomStarterViewModel @Inject constructor(
 
     fun initMultiSelectedUserData(vararg userIds: Int) {
         Log.d(logTag, "initMultiSelectedUserData: $userIds")
-        viewModelScope.launch {
+        userDataJob?.cancel()
+        userDataJob =  viewModelScope.launch {
             userDao.loadAllByIdsFlow(userIds.toList())
                 .distinctUntilChangedUserData()
                 .flowOn(Dispatchers.IO)
