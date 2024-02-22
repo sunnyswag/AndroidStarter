@@ -8,9 +8,12 @@ import com.example.roomstarter.room.UserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,9 +25,9 @@ class RoomStarterViewModel @Inject constructor(
     private val logTag = "RoomStarterViewModel"
     private var curUserIndex = DEFAULT_INDEX
 
-    private val _testDistinctData = MutableSharedFlow<Int>()
-    private val testDistinctData: Flow<Int>
-        get() = _testDistinctData.distinctUntilChanged()
+    private val _selectedUserData = MutableStateFlow<List<User>>(listOf())
+    val selectedUserData: Flow<List<User>>
+        get() = _selectedUserData
 
     val userData = userDao.getAll()
         .stateIn(
@@ -33,51 +36,34 @@ class RoomStarterViewModel @Inject constructor(
             initialValue = listOf()
         )
 
-    val selectedData = userDao.loadAllById(3)
+    val selectedData = userDao.queryByUserId(3)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = null
         )
 
-    val selectedMultiData = userDao.loadAllByIdsFlow(2, 3)
-        .distinctUntilChanged(areEquivalent = {
-            old, new ->
-            if (old.size != new.size) {
-                return@distinctUntilChanged false
-            }
-
-            for (i in old.indices) {
-                if (old[i] != new[i]) {
-                    return@distinctUntilChanged false
-                }
-            }
-
-            return@distinctUntilChanged true
-        })
-
-    init {
+    fun initSelectedUserData(userId: Int) {
+        Log.d(logTag, "initSelectedUserData: $userId")
         viewModelScope.launch {
-            testDistinctData.collect { value ->
-                Log.d(logTag, "collectDistinctData: $value")
-            }
+            userDao.queryByUserId(userId)
+                .map { listOf(it) }
+                .flowOn(Dispatchers.IO)
+                .collect { _selectedUserData.emit(it) }
         }
     }
 
-    fun selectedMultiDataDistinct() = userDao.loadAllByIdsFlow(2, 3)
-        .distinctUntilChanged(areEquivalent = { old, new ->
-//            if (old.size != new.size) {
-//                return@distinctUntilChanged false
-//            }
-//
-//            for (i in old.indices) {
-//                if (old[i] != new[i]) {
-//                    return@distinctUntilChanged false
-//                }
-//            }
-
-            return@distinctUntilChanged true
-        })
+    fun initMultiSelectedUserData(vararg userIds: Int) {
+        Log.d(logTag, "initMultiSelectedUserData: $userIds")
+        viewModelScope.launch {
+            userDao.loadAllByIdsFlow(userIds.toList())
+                .distinctUntilChangedUserData()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    _selectedUserData.emit(it)
+                }
+        }
+    }
 
     fun insertData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -86,15 +72,9 @@ class RoomStarterViewModel @Inject constructor(
         }
     }
 
-    fun updateUser0() {
+    fun updateUser(userId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            userDao.update(User(0, "$curUserIndex", "$curUserIndex"))
-        }
-    }
-
-    fun updateUser3() {
-        viewModelScope.launch(Dispatchers.IO) {
-            userDao.update(User(3, "$curUserIndex", "$curUserIndex"))
+            userDao.update(User(userId, "$curUserIndex", "$curUserIndex"))
         }
     }
 
@@ -107,14 +87,6 @@ class RoomStarterViewModel @Inject constructor(
         }
     }
 
-    fun startTestDistinctData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val random = (0..2).random()
-            Log.d(logTag, "emitDistinctData: $random")
-            _testDistinctData.emit(random)
-        }
-    }
-
     fun deleteAll() {
         viewModelScope.launch(Dispatchers.IO) {
             userDao.deleteAll()
@@ -124,5 +96,20 @@ class RoomStarterViewModel @Inject constructor(
 
     companion object {
         private const val DEFAULT_INDEX = -1
+        private fun Flow<List<User>>.distinctUntilChangedUserData() =
+            distinctUntilChanged(areEquivalent = {
+                    old, new ->
+                if (old.size != new.size) {
+                    return@distinctUntilChanged false
+                }
+
+                for (i in old.indices) {
+                    if (old[i] != new[i]) {
+                        return@distinctUntilChanged false
+                    }
+                }
+
+                return@distinctUntilChanged true
+            })
     }
 }

@@ -19,10 +19,10 @@ interface UserDao {
     fun loadAllByIds(userIds: IntArray): List<User>
 
     @Query("SELECT * FROM user WHERE uid in (:userIds)")
-    fun loadAllByIdsFlow(vararg userIds: Int): Flow<List<User>>
+    fun loadAllByIdsFlow(userIds: List<Int>): Flow<List<User>>
 
     @Query("SELECT * FROM user WHERE uid = :userId")
-    fun loadAllById(userId: Int): Flow<User>
+    fun queryByUserId(userId: Int): Flow<User>
 
     @Query("SELECT * FROM user WHERE first_name LIKE :first AND " +
             "last_name LIKE :last LIMIT 1")

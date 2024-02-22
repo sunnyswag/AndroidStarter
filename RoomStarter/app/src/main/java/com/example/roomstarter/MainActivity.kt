@@ -29,6 +29,7 @@ import com.example.roomstarter.room.User
 import com.example.roomstarter.room.UserDao
 import com.example.roomstarter.ui.theme.RoomStarterTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,6 +44,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[RoomStarterViewModel::class.java]
+        viewModel.initSelectedUserData(2)
+//        viewModel.initMultiSelectedUserData(2, 3)
 
         lifecycleScope.launch {
             viewModel.userData.collect {
@@ -57,8 +60,8 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.selectedMultiData.collect {
-                Log.d(TAG, "selectedMultiData: $it")
+            viewModel.selectedUserData.collect {
+                Log.d(TAG, "selectedUserData: $it, ${it.size}, ${it.first().firstName}")
             }
         }
 
@@ -72,12 +75,8 @@ class MainActivity : ComponentActivity() {
                     val viewModel by viewModels<RoomStarterViewModel>()
                     val allUserData by viewModel.userData.collectAsState()
                     val filteredUserData by viewModel.selectedData.collectAsState()
-                    val filteredMultiUserData by viewModel.selectedMultiData.collectAsState(listOf())
-                    val filteredMultiUserDataDistinct by viewModel.selectedMultiDataDistinct().collectAsState(
-                        listOf()
-                    )
                     Column {
-                        DistinctUntilChangedTestButton(viewModel)
+                        UpdateFlowDataTestButton(viewModel)
                         Row {
                             EditUserRoomTable("Delete last User") { viewModel.deleteLastData() }
                             Spacer(modifier = Modifier.width(5.dp))
@@ -85,17 +84,15 @@ class MainActivity : ComponentActivity() {
                         }
                         EditUserRoomTable("Insert User") { viewModel.insertData() }
                         Row {
-                            EditUserRoomTable("Edit User(0)") { viewModel.updateUser0() }
+                            EditUserRoomTable("Edit User(0)") { viewModel.updateUser(0) }
                             Spacer(modifier = Modifier.width(5.dp))
-                            EditUserRoomTable("Edit User(3)") { viewModel.updateUser3() }
+                            EditUserRoomTable("Edit User(3)") { viewModel.updateUser(3) }
                         }
                         Spacer(modifier = Modifier.height(5.dp))
                         ShowUserInfo(allUserData)
                         Spacer(modifier = Modifier.height(20.dp))
                         ShowLatestUserInfo(filteredUserData)
                         Spacer(modifier = Modifier.height(20.dp))
-                        ShowUserInfo(filteredMultiUserData, logTag = "filteredMultiUserData")
-                        ShowUserInfo(filteredMultiUserDataDistinct, logTag = "filteredMultiUserDataDistinct")
                     }
                 }
             }
@@ -103,11 +100,12 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun DistinctUntilChangedTestButton(viewModel: RoomStarterViewModel) {
+    private fun UpdateFlowDataTestButton(viewModel: RoomStarterViewModel) {
         Button(modifier = Modifier.wrapContentSize(), onClick = {
-            viewModel.startTestDistinctData()
+            viewModel.initSelectedUserData(3)
+//            viewModel.initMultiSelectedUserData(4, 5)
         }) {
-            Text(text = "Emit Distinct Data")
+            Text(text = "Update Flow Data")
         }
     }
 }
