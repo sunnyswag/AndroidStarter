@@ -12,9 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,10 +24,15 @@ class RoomStarterViewModel @Inject constructor(
     private val logTag = "RoomStarterViewModel"
     private var curUserIndex = DEFAULT_INDEX
     private var userDataJob: Job? = null
+    private var usersDataJob: Job? = null
 
-    private val _selectedUserData = MutableStateFlow<List<User>>(listOf())
-    val selectedUserData: Flow<List<User>>
+    private val _selectedUserData = MutableStateFlow<User?>(User())
+    val selectedUserData: Flow<User?>
         get() = _selectedUserData
+
+    private val _selectedUsersData = MutableStateFlow<List<User>>(listOf())
+    val selectedUsersData: Flow<List<User>>
+        get() = _selectedUsersData
 
     val userData = userDao.getAll()
         .stateIn(
@@ -46,26 +49,24 @@ class RoomStarterViewModel @Inject constructor(
         )
 
     fun initSelectedUserData(userId: Int) {
-        Log.d(logTag, "initSelectedUserData: $userId")
+        Log.d(logTag, "start subscribe userId: $userId")
         userDataJob?.cancel()
         userDataJob = viewModelScope.launch {
             userDao.queryByUserId(userId)
-                .filterNotNull()
-                .map { listOf(it) }
                 .flowOn(Dispatchers.IO)
                 .collect { _selectedUserData.emit(it) }
         }
     }
 
     fun initMultiSelectedUserData(vararg userIds: Int) {
-        Log.d(logTag, "initMultiSelectedUserData: $userIds")
-        userDataJob?.cancel()
-        userDataJob =  viewModelScope.launch {
+        Log.d(logTag, "start subscribe userIds: $userIds")
+        usersDataJob?.cancel()
+        usersDataJob =  viewModelScope.launch {
             userDao.loadAllByIdsFlow(userIds.toList())
                 .distinctUntilChangedUserData()
                 .flowOn(Dispatchers.IO)
                 .collect {
-                    _selectedUserData.emit(it)
+                    _selectedUsersData.emit(it)
                 }
         }
     }
@@ -73,7 +74,9 @@ class RoomStarterViewModel @Inject constructor(
     fun insertData() {
         viewModelScope.launch(Dispatchers.IO) {
             curUserIndex++
-            userDao.insert(User(curUserIndex, curUserIndex.toString(), curUserIndex.toString()))
+            val insertUser = User(curUserIndex, curUserIndex.toString(), curUserIndex.toString())
+            Log.d(logTag, "insertData: $insertUser")
+            userDao.insert(insertUser)
         }
     }
 

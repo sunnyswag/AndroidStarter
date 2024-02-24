@@ -15,13 +15,13 @@ interface UserDao {
     @Query("SELECT * FROM user")
     fun queryAll(): List<User>
 
-    @Query("SELECT * FROM user WHERE uid IN (:userIds)")
+    @Query("SELECT * FROM user WHERE userId IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<User>
 
-    @Query("SELECT * FROM user WHERE uid in (:userIds)")
+    @Query("SELECT * FROM user WHERE userId in (:userIds)")
     fun loadAllByIdsFlow(userIds: List<Int>): Flow<List<User>>
 
-    @Query("SELECT * FROM user WHERE uid = :userId")
+    @Query("SELECT * FROM user WHERE userId = :userId")
     fun queryByUserId(userId: Int): Flow<User?>
 
     @Query("SELECT * FROM user WHERE first_name LIKE :first AND " +
@@ -37,7 +37,7 @@ interface UserDao {
     @Update
     fun update(user: User)
 
-    @Query("DELETE FROM user WHERE uid = :uid")
+    @Query("DELETE FROM user WHERE userId = :uid")
     fun deleteByUid(uid: Int)
 
     @Query("DELETE FROM user")

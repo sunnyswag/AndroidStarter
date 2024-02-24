@@ -29,7 +29,6 @@ import com.example.roomstarter.room.User
 import com.example.roomstarter.room.UserDao
 import com.example.roomstarter.ui.theme.RoomStarterTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,18 +43,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[RoomStarterViewModel::class.java]
-//        viewModel.initSelectedUserData(2)
-        viewModel.initMultiSelectedUserData(2, 3)
+        viewModel.initSelectedUserData(2)
+//        viewModel.initMultiSelectedUserData(2, 3)
 
         lifecycleScope.launch {
             viewModel.userData.collect {
-                Log.d(TAG, "userData: $it")
+//                Log.d(TAG, "userData: $it")
             }
         }
 
         lifecycleScope.launch {
             viewModel.selectedData.collect {
-                Log.d(TAG, "selectedData: $it")
+//                Log.d(TAG, "selectedData: $it")
             }
         }
 
@@ -64,6 +63,12 @@ class MainActivity : ComponentActivity() {
                 Log.d(TAG, "selectedUserData: $it")
             }
         }
+
+//        lifecycleScope.launch {
+//            viewModel.selectedUsersData.collect {
+//                Log.d(TAG, "selectedUsersData: $it")
+//            }
+//        }
 
         setContent {
             RoomStarterTheme {
@@ -102,8 +107,8 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun UpdateFlowDataTestButton(viewModel: RoomStarterViewModel) {
         Button(modifier = Modifier.wrapContentSize(), onClick = {
-//            viewModel.initSelectedUserData(3)
-            viewModel.initMultiSelectedUserData(4, 5)
+            viewModel.initSelectedUserData(3)
+//            viewModel.initMultiSelectedUserData(4, 5)
         }) {
             Text(text = "Update Flow Data")
         }
@@ -119,7 +124,7 @@ fun ShowUserInfo(userInfo: List<User>, logTag: String? = null) {
     }
     LazyColumn {
         items(userInfo) {
-            Text(text = "uid: ${it.uid}, firstName: ${it.firstName}, lastName: ${it.lastName}")
+            Text(text = "uid: ${it.userId}, firstName: ${it.firstName}, lastName: ${it.lastName}")
         }
     }
 }
@@ -128,7 +133,7 @@ fun ShowUserInfo(userInfo: List<User>, logTag: String? = null) {
 fun ShowLatestUserInfo(userInfo: User?) {
 //    Log.d(TAG, "$userInfo")
     userInfo?.let {
-        Text(text = "uid: ${userInfo.uid}, firstName: ${it.firstName}, lastName: ${it.lastName}")
+        Text(text = "uid: ${userInfo.userId}, firstName: ${it.firstName}, lastName: ${it.lastName}")
     }
 }
 
