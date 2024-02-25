@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val viewModel by viewModels<RoomStarterViewModel>()
                     val allUserData by viewModel.userData.collectAsState()
-                    val filteredUserData by viewModel.selectedData.collectAsState()
+                    val selectedUserData by viewModel.selectedUserData.collectAsState(User())
                     Column {
                         UpdateFlowDataTestButton(viewModel)
                         Row {
@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(5.dp))
                         ShowUserInfo(allUserData)
                         Spacer(modifier = Modifier.height(20.dp))
-                        ShowLatestUserInfo(filteredUserData)
+                        ShowSelectedUserInfo(selectedUserData)
                         Spacer(modifier = Modifier.height(20.dp))
                     }
                 }
@@ -130,8 +130,8 @@ fun ShowUserInfo(userInfo: List<User>, logTag: String? = null) {
 }
 
 @Composable
-fun ShowLatestUserInfo(userInfo: User?) {
-//    Log.d(TAG, "$userInfo")
+fun ShowSelectedUserInfo(userInfo: User?) {
+//    Log.d(TAG, "ShowSelectedUserInfo: $userInfo")
     userInfo?.let {
         Text(text = "uid: ${userInfo.userId}, firstName: ${it.firstName}, lastName: ${it.lastName}")
     }
