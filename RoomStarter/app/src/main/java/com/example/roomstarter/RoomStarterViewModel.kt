@@ -54,18 +54,22 @@ class RoomStarterViewModel @Inject constructor(
         userDataJob = viewModelScope.launch {
             userDao.queryByUserId(userId)
                 .flowOn(Dispatchers.IO)
-                .collect { _selectedUserData.emit(it) }
+                .distinctUntilChanged()
+                .collect {
+                    Log.d(logTag, "collect in ViewModel: $it")
+                    _selectedUserData.emit(it)
+                }
         }
     }
 
     fun initMultiSelectedUserData(vararg userIds: Int) {
-        Log.d(logTag, "start subscribe userIds: $userIds")
+        Log.d(logTag, "start subscribe userIds: ${userIds.toList()}")
         usersDataJob?.cancel()
-        usersDataJob =  viewModelScope.launch {
-            userDao.loadAllByIdsFlow(userIds.toList())
-                .distinctUntilChangedUserData()
+        usersDataJob = viewModelScope.launch {
+            userDao.queryByUserIds(userIds.toList())
                 .flowOn(Dispatchers.IO)
                 .collect {
+                    Log.d(logTag, "collect in ViewModel: $it")
                     _selectedUsersData.emit(it)
                 }
         }
@@ -104,9 +108,8 @@ class RoomStarterViewModel @Inject constructor(
 
     companion object {
         private const val DEFAULT_INDEX = -1
-        private fun Flow<List<User>>.distinctUntilChangedUserData() =
-            distinctUntilChanged(areEquivalent = {
-                    old, new ->
+        private fun Flow<List<User>>.distinctUntilChangedUsersData() =
+            distinctUntilChanged(areEquivalent = { old, new ->
                 if (old.size != new.size) {
                     return@distinctUntilChanged false
                 }

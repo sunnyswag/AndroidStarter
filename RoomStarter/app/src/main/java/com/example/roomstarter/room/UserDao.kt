@@ -19,7 +19,7 @@ interface UserDao {
     fun loadAllByIds(userIds: IntArray): List<User>
 
     @Query("SELECT * FROM user WHERE userId in (:userIds)")
-    fun loadAllByIdsFlow(userIds: List<Int>): Flow<List<User>>
+    fun queryByUserIds(userIds: List<Int>): Flow<List<User>>
 
     @Query("SELECT * FROM user WHERE userId = :userId")
     fun queryByUserId(userId: Int): Flow<User?>

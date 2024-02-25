@@ -60,13 +60,13 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             viewModel.selectedUserData.collect {
-                Log.d(TAG, "selectedUserData: $it")
+                Log.d(TAG, "collect in Activity: $it")
             }
         }
 
 //        lifecycleScope.launch {
 //            viewModel.selectedUsersData.collect {
-//                Log.d(TAG, "selectedUsersData: $it")
+//                Log.d(TAG, "collect in Activity: $it")
 //            }
 //        }
 
