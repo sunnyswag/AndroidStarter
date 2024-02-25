@@ -34,13 +34,6 @@ class RoomStarterViewModel @Inject constructor(
     val selectedUsersData: Flow<List<User>>
         get() = _selectedUsersData
 
-    val userData = userDao.getAll()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = listOf()
-        )
-
     val selectedData = userDao.queryByUserId(3)
         .stateIn(
             scope = viewModelScope,
