@@ -47,12 +47,6 @@ class MainActivity : ComponentActivity() {
 //        viewModel.initMultiSelectedUserData(2, 3)
 
         lifecycleScope.launch {
-            viewModel.userData.collect {
-//                Log.d(TAG, "userData: $it")
-            }
-        }
-
-        lifecycleScope.launch {
             viewModel.selectedData.collect {
 //                Log.d(TAG, "selectedData: $it")
             }
@@ -78,7 +72,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val viewModel by viewModels<RoomStarterViewModel>()
-                    val allUserData by viewModel.userData.collectAsState()
                     val selectedUserData by viewModel.selectedUserData.collectAsState(User())
                     Column {
                         UpdateFlowDataTestButton(viewModel)
@@ -94,8 +87,6 @@ class MainActivity : ComponentActivity() {
                             EditUserRoomTable("Edit User(3)") { viewModel.updateUser(3) }
                         }
                         Spacer(modifier = Modifier.height(5.dp))
-                        ShowUserInfo(allUserData)
-                        Spacer(modifier = Modifier.height(20.dp))
                         ShowSelectedUserInfo(selectedUserData)
                         Spacer(modifier = Modifier.height(20.dp))
                     }
