@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ComposeMultiTheme"
 include(":app")
- 
+include(":compose-theme")
